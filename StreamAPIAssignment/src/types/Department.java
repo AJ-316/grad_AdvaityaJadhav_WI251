@@ -1,0 +1,3 @@
+package types;
+
+public enum Department { ADMINISTRATION, ENGINEERING, FINANCE, HR, IT, MARKETING, OPERATIONS, SALES; }
