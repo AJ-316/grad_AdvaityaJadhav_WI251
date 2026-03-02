@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title>Loan Calculator</title>
+    <script>
+        function handleEmiTypeSelect() {
+            switch (document.emiForm.type.value) {
+                case "home": updateValues(9, 500000, 30);
+                    break;
+                case "car": updateValues(12, 100000, 7);
+                    break;
+                case "personal": updateValues(15, 10000, 5);
+                    break;
+                default: alert("Select EMI Type");
+            }
+        }
+
+        function calculateEMI(event) {
+            event.preventDefault();
+            let principal = parseFloat(document.emiForm.amount.value);
+            let annualInterest = parseFloat(document.emiForm.interest.value);
+            let years = parseFloat(document.emiForm.duration.value);
+
+            if (!principal || !annualInterest || !years) {
+                alert("Please fill all fields correctly");
+                return;
+            }
+
+            let monthlyRate = annualInterest / 12 / 100;
+            let months = years * 12;
+
+            let emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) /
+                (Math.pow(1 + monthlyRate, months) - 1);
+
+            document.getElementById("emiResult").innerText = "Monthly EMI: " + emi.toFixed(2);
+        }
+
+        function updateValues(interest, amountMin, durationMax) {
+            document.emiForm.interest.value = interest;
+
+            document.emiForm.amount.placeholder = "Minimum Amount " + amountMin;
+            document.emiForm.amount.min = amountMin;
+            document.emiForm.amount.disabled = false;
+
+            document.emiForm.duration.placeholder = "Maximum Duration " + durationMax;
+            document.emiForm.duration.max = durationMax;
+            document.emiForm.duration.disabled = false;
+        }
+    </script>
+</head>
+<body>
+<h1>Loan Calculator</h1>
+<form name="emiForm" onsubmit="calculateEMI(event)">
+    Applicant <input name="applicant" type="text" placeholder="Full Name" required="true" minlength="5"><br>
+    Type
+    <select name="type" onchange="handleEmiTypeSelect()">
+        <option value="default">Select EMI Type</option>
+        <option value="home">Home</option>
+        <option value="car">Car</option>
+        <option value="personal">Personal</option>
+    </select> <br>
+    Interest <input name="interest" type="number" placeholder="Select EMI Type" disabled><br>
+    Amount <input name="amount" type="number" placeholder="Select EMI Type" disabled required><br>
+    Duration (Years) <input name="duration" type="number" placeholder="Select EMI Type" disabled required><br>
+    <br>
+    <h3 id="emiResult"></h3>
+    <br>
+    <button type="submit">Calculate EMI</button>
+</form>
+
+</body>
+</html>
